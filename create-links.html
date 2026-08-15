@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo link thiệp cá nhân hoá</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--blue:#88c5d8;--pale:#e8f6f9;--ink:#315968;--muted:#708a94;--line:#cfe7ed;--paper:#fcfdfc}*{box-sizing:border-box}body{min-height:100vh;margin:0;padding:26px 15px;background:radial-gradient(circle at 12% 5%,#fff,transparent 28rem),linear-gradient(135deg,#d8eff4,#acd8e5);color:var(--ink);font:500 13px/1.6 Montserrat,sans-serif}.app{width:min(100%,760px);margin:auto;padding:clamp(24px,5vw,42px);border:1px solid rgba(255,255,255,.8);border-radius:24px;background:repeating-linear-gradient(0deg,rgba(76,137,154,.02) 0 1px,transparent 1px 4px),var(--paper);box-shadow:0 20px 50px rgba(47,112,131,.15)}.eyebrow{margin:0;color:#639bae;font-size:9px;font-weight:700;letter-spacing:.17em;text-transform:uppercase}h1{margin:8px 0 5px;font:700 clamp(32px,7vw,46px)/.93 "Cormorant Garamond",serif;letter-spacing:-.04em}header>p:last-child{margin:0;color:var(--muted);font-size:11px}form{display:grid;gap:19px;margin-top:28px}label{display:grid;gap:7px;color:#53727d;font-size:10px;font-weight:700;letter-spacing:.07em}input,textarea{width:100%;border:1px solid var(--line);border-radius:10px;outline:0;background:#fff;color:#405f6a;padding:12px;font:500 12px/1.6 Montserrat,sans-serif;transition:.2s}textarea{min-height:135px;resize:vertical}input:focus,textarea:focus{border-color:#79b9ca;box-shadow:0 0 0 3px rgba(168,216,234,.36)}.hint{margin:-3px 0 0;color:#7b969f;font-size:10px}.button-row{display:flex;flex-wrap:wrap;gap:9px}.button{border:0;border-radius:10px;padding:12px 15px;background:linear-gradient(120deg,#7cbccc,#4e91a6);color:#fff;cursor:pointer;font:700 10px Montserrat,sans-serif;letter-spacing:.07em;transition:.2s}.button:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(64,142,163,.24)}.button.secondary{border:1px solid var(--line);background:#fff;color:#578394}.button:disabled{cursor:not-allowed;opacity:.48;transform:none;box-shadow:none}.status{min-height:17px;margin:0;color:#4b879a;font-size:10px}.results{margin-top:30px}.results-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:11px}.results h2{margin:0;font:600 26px "Cormorant Garamond",serif}.count{color:#76909a;font-size:10px}.links{display:grid;gap:9px}.link-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#fff}.guest-name{display:block;color:#416b79;font-weight:700;font-size:11px}.url{display:block;overflow:hidden;margin-top:3px;color:#72909a;font-size:10px;text-overflow:ellipsis;white-space:nowrap}.copy-one{padding:8px 10px;border:1px solid #c9e4eb;border-radius:8px;background:#eef9fb;color:#4f899c;cursor:pointer;font-size:10px;font-weight:700}.empty{padding:21px;border:1px dashed #bcdce5;border-radius:11px;color:#78949d;text-align:center;font-size:11px}@media(max-width:440px){body{padding:12px}.app{padding:24px 18px}.link-card{grid-template-columns:1fr}.copy-one{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header><p class="eyebrow">Công cụ dành cho chủ tiệc</p><h1>Tạo link mời riêng</h1><p>Mỗi khách nhận một liên kết thiệp có tên được cá nhân hoá.</p></header>
+    <form id="linkForm">
+      <label>ĐƯỜNG DẪN WEBSITE THIỆP
+        <input id="siteUrl" type="url" required placeholder="https://ten-mien-cua-ban.com/index.html">
+      </label>
+      <label>DANH SÁCH KHÁCH MỜI
+        <textarea id="guestNames" required placeholder="Anh Nam&#10;Bạn Phương&#10;Gia đình Minh"></textarea>
+        <span class="hint">Mỗi tên một dòng. Dòng trống sẽ tự động bỏ qua.</span>
+      </label>
+      <div class="button-row"><button class="button" type="submit">TẠO LINK MỜI ✦</button><button class="button secondary" id="copyAll" type="button" disabled>SAO CHÉP TẤT CẢ</button><button class="button secondary" id="exportCsv" type="button" disabled>XUẤT FILE CSV</button></div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </form>
+    <section class="results" aria-labelledby="resultTitle">
+      <div class="results-head"><h2 id="resultTitle">Danh sách link</h2><span class="count" id="count">0 khách mời</span></div>
+      <div class="links" id="links"><p class="empty">Link mời riêng sẽ xuất hiện ở đây.</p></div>
+    </section>
+  </main>
+  <script>
+    const form = document.querySelector('#linkForm');
+    const siteUrl = document.querySelector('#siteUrl');
+    const guestNames = document.querySelector('#guestNames');
+    const links = document.querySelector('#links');
+    const status = document.querySelector('#status');
+    const count = document.querySelector('#count');
+    const copyAll = document.querySelector('#copyAll');
+    const exportCsv = document.querySelector('#exportCsv');
+    let generatedLinks = [];
+
+    function createLinks(baseUrl, names) {
+      const normalizedUrl = /^https?:\/\//i.test(baseUrl) ? baseUrl : `https://${baseUrl}`;
+      return names.map((name) => {
+        const url = new URL(normalizedUrl);
+        url.searchParams.set('to', name);
+        return { name, url: url.toString() };
+      });
+    }
+
+    function renderLinks() {
+      count.textContent = `${generatedLinks.length} khách mời`;
+      copyAll.disabled = generatedLinks.length === 0;
+      exportCsv.disabled = generatedLinks.length === 0;
+      if (!generatedLinks.length) { links.innerHTML = '<p class="empty">Link mời riêng sẽ xuất hiện ở đây.</p>'; return; }
+      links.innerHTML = generatedLinks.map((guest, index) => `
+        <article class="link-card"><div><span class="guest-name">${escapeHtml(guest.name)}</span><span class="url">${escapeHtml(guest.url)}</span></div><button class="copy-one" type="button" data-index="${index}">Sao chép</button></article>
+      `).join('');
+    }
+
+    function escapeHtml(value) { return value.replace(/[&<>"']/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]); }
+    async function copyText(value, message) {
+      try { await navigator.clipboard.writeText(value); status.textContent = message; }
+      catch { status.textContent = 'Không thể tự sao chép. Vui lòng sao chép thủ công từ danh sách.'; }
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const names = [...new Set(guestNames.value.split(/\r?\n/).map((name) => name.trim()).filter(Boolean))];
+      try { generatedLinks = createLinks(siteUrl.value.trim(), names); renderLinks(); status.textContent = `Đã tạo ${generatedLinks.length} link mời cá nhân hoá.`; }
+      catch { generatedLinks = []; renderLinks(); status.textContent = 'Đường dẫn website chưa hợp lệ. Hãy kiểm tra và thử lại.'; }
+    });
+    links.addEventListener('click', (event) => { const button = event.target.closest('.copy-one'); if (button) copyText(generatedLinks[button.dataset.index].url, 'Đã sao chép link mời.'); });
+    copyAll.addEventListener('click', () => copyText(generatedLinks.map(({name,url}) => `${name}: ${url}`).join('\n'), 'Đã sao chép toàn bộ danh sách link.'));
+    exportCsv.addEventListener('click', () => {
+      const csv = '\uFEFFTên khách mời,Link thiệp\n' + generatedLinks.map(({name,url}) => `"${name.replaceAll('"','""')}","${url.replaceAll('"','""')}"`).join('\n');
+      const fileUrl = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+      const link = Object.assign(document.createElement('a'), {href:fileUrl,download:'danh-sach-link-thiep.csv'}); link.click(); URL.revokeObjectURL(fileUrl); status.textContent = 'Đã xuất file CSV.';
+    });
+  </script>
+</body>
+</html>

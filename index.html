@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#a8d8ea">
+  <meta name="description" content="Thiệp mời sinh nhật của Lê Võ Như Quỳnh">
+  <title>Quỳnh's Birthday Celebration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="opening" id="opening" aria-label="Mở thiệp mời">
+    <div class="opening-glow"></div>
+    <p class="opening-kicker">THIỆP MỜI SINH NHẬT</p>
+    <div class="opening-seal">Q<span>22</span></div>
+    <h1>Quỳnh's<br><em>Birthday</em></h1>
+    <button class="open-button" id="openInvitation" type="button">Chạm để mở thiệp <span>♡</span></button>
+  </div>
+
+  <main class="page-shell" id="invitation">
+    <article class="card">
+      <button class="music-toggle" id="musicToggle" type="button" aria-label="Bật nhạc" aria-pressed="false">♫</button>
+      <audio id="backgroundMusic" preload="none"></audio>
+      <span class="butterfly butterfly-a" aria-hidden="true">🦋</span>
+      <span class="butterfly butterfly-b" aria-hidden="true">🦋</span>
+      <span class="butterfly butterfly-c" aria-hidden="true">🦋</span><span class="butterfly butterfly-hero" aria-hidden="true">🦋</span>
+
+      <header class="hero reveal">
+        <p class="kicker">TRÂN TRỌNG MỜI BẠN</p>
+        <div class="hero-line"></div>
+        <p class="hero-type">Mừng sinh nhật tuổi 22</p>
+        <h2 data-config="personName">Lê Võ Như Quỳnh</h2>
+        <p class="event-date" data-config="eventDate">24 / 08 / 2026</p>
+        <p class="recipient-line" id="recipientLine">Trân trọng kính mời: <strong>Bạn và Gia đình</strong></p>
+        <p class="hero-quote">“Cùng Quỳnh đón một chương mới thật đẹp nhé.”</p>
+        <a class="down-link" href="#countdown" aria-label="Xem thông tin thiệp">↓</a>
+      </header>
+
+      <section class="countdown-section reveal" id="countdown">
+        <p class="kicker">CÙNG ĐẾM NGƯỢC ĐẾN NGÀY VUI</p>
+        <div class="countdown" aria-live="polite">
+          <div><strong id="days">00</strong><span>NGÀY</span></div><i>:</i>
+          <div><strong id="hours">00</strong><span>GIỜ</span></div><i>:</i>
+          <div><strong id="minutes">00</strong><span>PHÚT</span></div><i>:</i>
+          <div><strong id="seconds">00</strong><span>GIÂY</span></div>
+        </div>
+        <p class="celebration-begun" id="celebrationBegun" hidden>BUỔI TIỆC ĐÃ BẮT ĐẦU ✨</p>
+      </section>
+
+      <section class="section information reveal" aria-labelledby="infoTitle">
+        <p class="kicker">EVENT DETAILS</p>
+        <h3 id="infoTitle">Save the date</h3>
+        <div class="detail-list">
+          <div class="detail-card"><span class="detail-icon">◷</span><div><small>DATE & TIME</small><strong data-config="eventDateTime">18:00 · 24 / 08 / 2026</strong></div></div>
+          <div class="detail-card"><span class="detail-icon">⌖</span><div><small>LOCATION</small><strong data-config="locationName">JuJu Station</strong></div></div>
+          <div class="detail-card"><span class="detail-icon">✦</span><div><small>DRESS CODE</small><strong data-config="dressCode">Free Style</strong></div></div>
+        </div>
+      </section>
+
+      <section class="location reveal" aria-labelledby="locationTitle">
+        <div class="map-art" aria-hidden="true"><span>JUJU<br>STATION</span><i>⌖</i></div>
+        <div class="location-copy"><p class="kicker">ĐỊA ĐIỂM HẸN GẶP</p><h3 id="locationTitle" data-config="locationName">JuJu Station</h3><p data-config="address">JuJu Station, TP. Hồ Chí Minh</p><a class="directions" id="directionsLink" href="https://maps.google.com/?q=JuJu+Station" target="_blank" rel="noopener">CHỈ ĐƯỜNG <span>↗</span></a></div>
+      </section>
+
+      <section class="section dress reveal" aria-labelledby="dressTitle">
+        <p class="kicker">DRESSCODE</p>
+        <h3 id="dressTitle">Tự do, thoải mái</h3>
+        <p class="dress-note">Hãy chọn trang phục khiến bạn tự tin và thật rạng rỡ nhé.</p>
+      </section>
+
+      <section class="portrait-section reveal" aria-labelledby="portraitName">
+        <div class="portrait-frame"><img id="personImage" src="assets/images/anh_hinh_nen_Quynh.jpg" alt="Lê Võ Như Quỳnh"></div>
+        <p class="kicker">NHÂN VẬT CHÍNH HÔM NAY</p><h3 id="portraitName" data-config="personName">Lê Võ Như Quỳnh</h3>
+      </section>
+
+      <section class="note-section reveal"><p class="kicker">LỜI NHẮN NHỎ</p><span class="quote">“</span><p data-config="personalNote">Sự hiện diện của bạn là niềm vui và là món quà tuyệt vời nhất dành cho Quỳnh trong cột mốc tuổi 22 này. Hãy đến cùng chung vui và ghi dấu những khoảnh khắc thật đẹp nhé!</p><span class="note-signature">thân mến, Quỳnh</span></section>
+
+      <section class="section rsvp reveal" id="rsvp" aria-labelledby="rsvpTitle">
+        <p class="kicker">XÁC NHẬN THAM DỰ</p><h3 id="rsvpTitle">Bạn sẽ đến chứ?</h3><p class="intro">Sự có mặt của bạn sẽ làm buổi tiệc thêm trọn vẹn.</p>
+        <form id="rsvpForm" novalidate>
+          <label>HỌ VÀ TÊN<input type="text" name="name" autocomplete="name" placeholder="Nhập họ và tên" required></label>
+          <fieldset><legend>BẠN CÓ THỂ THAM DỰ KHÔNG?</legend><div class="radio-stack"><label><input type="radio" name="attendance" value="Có, mình sẽ đến" required><span>CÓ, MÌNH SẼ ĐẾN</span></label><label><input type="radio" name="attendance" value="Rất tiếc, mình không thể đến"><span>RẤT TIẾC, MÌNH KHÔNG THỂ ĐẾN</span></label></div></fieldset>
+          <label>LỜI CHÚC DÀNH CHO QUỲNH<textarea name="message" rows="4" placeholder="Viết lời chúc thật đáng yêu..."></textarea></label>
+          <button class="confirm-button" type="submit">GỬI XÁC NHẬN <span>✦</span></button>
+          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="closing-card reveal" aria-labelledby="closingTitle"><p class="kicker">SEE YOU SOON</p><h3 id="closingTitle">Hẹn gặp bạn tại bữa tiệc</h3><p>Đừng quên gửi xác nhận để Quỳnh chuẩn bị một buổi tối thật trọn vẹn nhé.</p><a href="#rsvp">XÁC NHẬN THAM DỰ <span>↓</span></a></section>
+      <footer>Được làm với thật nhiều yêu thương ♡</footer>
+    </article>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
