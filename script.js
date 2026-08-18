@@ -118,9 +118,12 @@ function setupRsvp() {
   const form = $('#rsvpForm');
   const message = $('#formMessage');
 
-  if (!form) return;
+  if (!form) {
+    console.error('Không tìm thấy #rsvpForm');
+    return;
+  }
 
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', (event) => {
     event.preventDefault();
 
     // Kiểm tra form
@@ -129,82 +132,130 @@ function setupRsvp() {
       return;
     }
 
-    // Lấy dữ liệu form
+    // Lấy dữ liệu
     const formData = new FormData(form);
 
-    // Tên khách
-    const guest = (
-      formData.get('name')?.toString().trim() || ''
-    );
+    const guest =
+      formData.get('name')?.toString().trim() || '';
 
-    // Nhu cầu lưu trú
-    const response = (
-      formData.get('response')?.toString().trim() || ''
-    );
+    const response =
+      formData.get('response')?.toString().trim() || '';
 
-    // Lời chúc
-    const guestMessage = (
-      formData.get('message')?.toString().trim() || ''
-    );
+    const guestMessage =
+      formData.get('message')?.toString().trim() || '';
 
-    // Link thiệp hiện tại
     const page = window.location.href;
 
-    // Tạo dữ liệu gửi sang Google Apps Script
-    const data = new URLSearchParams();
+    // Kiểm tra dữ liệu trước khi gửi
+    console.log('===== RSVP =====');
+    console.log('guest:', guest);
+    console.log('response:', response);
+    console.log('message:', guestMessage);
+    console.log('page:', page);
+    console.log(
+      'Web App:',
+      invitationConfig.googleSheetsWebAppUrl
+    );
 
-    data.append('guest', guest);
-    data.append('response', response);
-    data.append('message', guestMessage);
-    data.append('page', page);
+    if (!invitationConfig.googleSheetsWebAppUrl) {
+      console.error('Chưa có URL Google Apps Script');
+      if (message) {
+        message.textContent =
+          'Chưa cấu hình kết nối Google Sheet.';
+      }
+      return;
+    }
 
-    // Nút gửi
+    // Tạo một form tạm để POST trực tiếp tới Google Apps Script
+    const submitForm = document.createElement('form');
+
+    submitForm.method = 'POST';
+    submitForm.action =
+      invitationConfig.googleSheetsWebAppUrl;
+
+    submitForm.target = 'rsvpSubmitFrame';
+    submitForm.style.display = 'none';
+
+    // Thêm dữ liệu
+    const fields = {
+      guest: guest,
+      response: response,
+      message: guestMessage,
+      page: page
+    };
+
+    Object.entries(fields).forEach(([name, value]) => {
+      const input = document.createElement('input');
+
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+
+      submitForm.appendChild(input);
+    });
+
+    // Tạo iframe ẩn để nhận response
+    let iframe = document.getElementById(
+      'rsvpSubmitFrame'
+    );
+
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+
+      iframe.id = 'rsvpSubmitFrame';
+      iframe.name = 'rsvpSubmitFrame';
+
+      iframe.style.display = 'none';
+
+      document.body.appendChild(iframe);
+    }
+
+    document.body.appendChild(submitForm);
+
+    // Disable nút gửi nếu có
     const submitButton =
       form.querySelector('button[type="submit"]');
 
-    submitButton.disabled = true;
-    submitButton.innerHTML = 'ĐANG GỬI...';
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.innerHTML = 'ĐANG GỬI...';
+    }
 
-    message.textContent = '';
+    if (message) {
+      message.textContent = 'ĐANG GỬI...';
+    }
 
-    try {
+    // Gửi
+    submitForm.submit();
 
-      await fetch(
-        invitationConfig.googleSheetsWebAppUrl,
-        {
-          method: 'POST',
-          body: data,
-          mode: 'no-cors'
-        }
-      );
+    // Google Apps Script xử lý rất nhanh,
+    // chờ một chút rồi báo thành công.
+    setTimeout(() => {
 
-      // Thông báo thành công
-      message.textContent =
-        'Cảm ơn bạn! Xác nhận của bạn đã được gửi đến Quỳnh. ♡';
+      if (message) {
+        message.textContent =
+          'Cảm ơn bạn! Xác nhận của bạn đã được gửi đến Quỳnh. ♡';
 
-      message.classList.remove('success');
+        message.classList.remove('success');
 
-      void message.offsetWidth;
+        void message.offsetWidth;
 
-      message.classList.add('success');
+        message.classList.add('success');
+      }
 
-      // Xóa dữ liệu form
       form.reset();
 
-    } catch (error) {
+      if (submitButton) {
+        submitButton.disabled = false;
 
-      console.error('Lỗi gửi RSVP:', error);
+        submitButton.innerHTML =
+          'GỬI XÁC NHẬN <span>✦</span>';
+      }
 
-      message.textContent =
-        'Có lỗi xảy ra khi gửi. Vui lòng thử lại nhé.';
+      // Xóa form tạm
+      submitForm.remove();
 
-    } finally {
-
-      submitButton.disabled = false;
-
-      submitButton.innerHTML =
-        'GỬI XÁC NHẬN <span>✦</span>';
-    }
+    }, 1500);
   });
 }
 
