@@ -12,7 +12,7 @@ const invitationConfig = {
   dressCode: 'Free Style',
   googleMapsUrl: 'https://maps.google.com/?q=JuJu+Station',
   // Dán URL Web App Google Apps Script (có đuôi /exec) vào giữa dấu nháy đơn.
-  googleSheetsWebAppUrl: 'https://script.google.com/macros/s/AKfycbzvTykipOyA6vJm0vh5UyqN02-lysM7oAF1XyVWVJbugWjwD8O3xlKygXOiLtVGL7RS/exec',
+  googleSheetsWebAppUrl: 'https://script.google.com/macros/s/AKfycbwVzu56GKAlrd-4zHC06pTwVKpKaFYOYhcZyYKeFaKL31iVLxGna2ZecsigD-h-i8d8/exec',
   personImage: 'assets/images/anh_hinh_nen_Quynh.jpg',
   music: 'assets/music/Khi 22.mp3',
   personalNote: 'Sự hiện diện của bạn là niềm vui và là món quà tuyệt vời nhất dành cho Quỳnh trong cột mốc tuổi 22 này. Hãy đến cùng chung vui và ghi dấu những khoảnh khắc thật đẹp nhé!'
@@ -145,13 +145,12 @@ function setupRsvp() {
 
     const guestUrl = window.location.href;
 
-    const submitData = new URLSearchParams();
-
-    submitData.append('guest', guestName);
-    submitData.append('name', guestName);
-    submitData.append('attendance', attendance);
-    submitData.append('message', guestMessage);
-    submitData.append('guestUrl', guestUrl);
+    const submitData = {
+      name: guestName,
+      attendance: attendance,
+      message: guestMessage,
+      guestUrl: guestUrl
+    };
 
     const submitButton = form.querySelector('button[type="submit"]');
 
@@ -163,7 +162,7 @@ function setupRsvp() {
     try {
       await fetch(invitationConfig.googleSheetsWebAppUrl, {
         method: 'POST',
-        body: submitData,
+        body: JSON.stringify(submitData),
         mode: 'no-cors'
       });
 
